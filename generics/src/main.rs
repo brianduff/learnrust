@@ -7,6 +7,7 @@ fn largest<T>(list: &[T]) -> T {
     let mut largest = list[0];
 
     for &item in list.iter() {
+        // This doesn't compile yet.
         if item > largest {
             largest = item;
         }
