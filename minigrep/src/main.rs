@@ -1,13 +1,20 @@
 use std::env;
-use std::fs;
+use std::process;
+// VSCode's rust support errors on this, but rustc is fine. Sigh.
+// use minigrep::Config;
+// This works
+mod lib;
+use lib::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let query = &args[1];
-    let filename = &args[2];
+    let config = Config::new(&args).unwrap_or_else(|err| {
+        println!("Problem parsing arguments: {}", err);
+        process::exit(1);
+    });
 
-    let contents = fs::read_to_string(filename)
-        .expect("Couldn't read file");
-
-    println!("{}", contents);
+    if let Err(e) = lib::run(config) {
+        println!("Error: {}", e);
+        process::exit(1);
+    }
 }
